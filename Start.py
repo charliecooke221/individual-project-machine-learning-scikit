@@ -1,3 +1,4 @@
+import pandas as pd
 import Preprocessing
 import Classifiers
 
@@ -10,10 +11,10 @@ class Start:
     classification_model = 'logisticRegression' # options: logisticRegression, ordinalLogisticRegression
 
     splitByDate = True
-    trainingDateStart = '2017-01-01'
-    trainingDateEnd = '2017-12-31'
-    testDateStart = '2018-01-1'
-    testDateEnd = '20118-02-30'
+    trainingDateStart = pd.to_datetime('2017-01-01')
+    trainingDateEnd = pd.to_datetime('2017-12-31')
+    testDateStart = pd.to_datetime('2018-01-1')
+    testDateEnd = pd.to_datetime('2018-02-18')
 
 
     def __init__(self):
@@ -27,10 +28,13 @@ class Start:
             pre.scale()  # TODO different scaling options
 
         if self.classification_model == 'logisticRegression':
-            predict = Classifiers.Classifiers(pre.features_dataframe,self.features_to_consider)
+            logReg_predict = Classifiers.Classifiers(pre.features_dataframe,self.features_to_consider)
 
             if self.splitByDate:
-                predict.splitDataset(self.trainingDateStart,self.trainingDateEnd,self.testDateStart,self.testDateEnd)
+                logReg_predict.splitDataset(self.trainingDateStart,self.trainingDateEnd,self.testDateStart,self.testDateEnd)
+
+            logReg_predict.LogRegTrainModel()
+            logReg_predict.LogRegTestModel()
 
         else:
             print("other model")
